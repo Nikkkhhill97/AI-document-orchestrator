@@ -1,0 +1,101 @@
+import streamlit as st
+import pdfplumber
+import json
+from google import genai
+# --- SETUP GEMINI ---
+
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+# --- PAGE SETUP ---
+st.set_page_config(page_title="AI Document Orchestrator", page_icon="📄", layout="wide")
+st.title("📄 AI-Powered Document Orchestrator")
+st.markdown("Upload a document, ask a question, and let AI do the work!")
+
+# --- STEP 1: FILE UPLOAD ---
+st.header("Step 1: Upload Your Document")
+
+uploaded_file = st.file_uploader("Choose a PDF or TXT file", type=["pdf", "txt"])
+
+extracted_text = ""
+
+if uploaded_file is not None:
+    if uploaded_file.type == "application/pdf":
+        with pdfplumber.open(uploaded_file) as pdf:
+            for page in pdf.pages:
+                extracted_text += page.extract_text() or ""
+        st.success("✅ PDF uploaded and text extracted!")
+
+    elif uploaded_file.type == "text/plain":
+        extracted_text = uploaded_file.read().decode("utf-8")
+        st.success("✅ Text file uploaded!")
+
+    st.subheader("📋 Extracted Text Preview:")
+    st.text_area("Raw Text (first 500 chars)", extracted_text[:500], height=200)
+
+# --- STEP 2: QUESTION INPUT ---
+st.header("Step 2: Ask a Question About the Document")
+user_question = st.text_input("Enter your question (e.g. 'What is the total amount due?')")
+
+# --- STEP 3: GEMINI EXTRACTION ---
+# We store extracted JSON in session state so it persists after button clicks
+if "extracted_json" not in st.session_state:
+    st.session_state.extracted_json = None
+
+if extracted_text and user_question:
+    if st.button("🔍 Analyze Document"):
+
+        with st.spinner("Gemini is analyzing your document..."):
+
+            # This is the prompt we send to Gemini
+            prompt = f"""
+You are a document analysis expert.
+
+A user has uploaded a document and asked this question:
+"{user_question}"
+
+Here is the document content:
+{extracted_text}
+
+Your job:
+1. Read the document carefully
+2. Identify the 5 to 8 most relevant key-value pairs that help answer the user's question
+3. Also include a field called "risk_level" — set it to "High", "Medium", or "Low" based on urgency or risk found in the document
+4. Return ONLY a valid JSON object, no explanation, no markdown, no extra text
+
+Example format:
+{{
+  "field_1": "value",
+  "field_2": "value",
+  "risk_level": "High"
+}}
+"""
+            try:
+                response = client.models.generate_content(
+                 model="gemini-3.1-flash-live-preview",
+                 contents=prompt
+                        )
+                raw = response.text.strip()
+
+                # Clean up if Gemini adds markdown code fences
+                if raw.startswith("```"):
+                    raw = raw.split("```")[1]
+                    if raw.startswith("json"):
+                        raw = raw[4:]
+
+                parsed = json.loads(raw)
+                st.session_state.extracted_json = parsed
+
+            except Exception as e:
+                st.error(f"❌ Gemini error: {e}")
+
+# --- DISPLAY EXTRACTED JSON ---
+if st.session_state.extracted_json:
+    st.header("📊 Output 1: Structured Data Extracted")
+    st.json(st.session_state.extracted_json)
+    st.success("✅ Extraction complete! Scroll down to send email alert.")
+
+    # --- STEP 4: EMAIL SECTION (placeholder for now) ---
+    st.header("Step 3: Send Alert Email")
+    recipient_email = st.text_input("Enter Recipient Email ID")
+    if st.button("📧 Send Alert Mail"):
+        st.warning("n8n webhook coming in next step...")

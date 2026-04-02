@@ -1,0 +1,19 @@
+INVOICE #INV-2024-001
+Date: March 15, 2024
+Due Date: April 15, 2024
+
+Bill To:
+ABC Company Ltd
+Mumbai, India
+
+Items:
+- Web Development Services: ₹45,000
+- UI Design: ₹15,000
+- Hosting Setup: ₹5,000
+
+Subtotal: ₹65,000
+Tax (18% GST): ₹11,700
+Total Amount Due: ₹76,700
+
+Payment Status: Normal  
+Late Fee Warning: Payment not received by due date
