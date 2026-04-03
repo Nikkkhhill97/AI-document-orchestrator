@@ -29,7 +29,7 @@ if uploaded_file is not None:
         st.success("✅ Text file uploaded!")
 
     st.subheader("📋 Extracted Text Preview:")
-    st.text_area("Raw Text (first 500 chars)", extracted_text[:500], height=200)
+    st.text_area("Raw Text (first 1000 chars)", extracted_text[:1000], height=200)
 
 # --- STEP 2: QUESTION INPUT ---
 st.header("Step 2: Ask a Question About the Document")

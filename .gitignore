@@ -1,1 +1,1 @@
-venv/.venv/__pycache__/.env
+venv/.venv/__pycache__/.envRemove-Item -Force .git\index.lock
