@@ -10,6 +10,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 # --- PAGE SETUP ---
 st.set_page_config(page_title="AI Document Orchestrator", page_icon="📄", layout="wide")
 st.title("📄 AI-Powered Document Orchestrator")
+st.markdown("By Nikhil Sharma")
 st.markdown("Upload a document, ask a question, and let AI do the work!")
 
 # --- STEP 1: FILE UPLOAD ---
