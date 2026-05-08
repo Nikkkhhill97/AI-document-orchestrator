@@ -73,13 +73,13 @@ Groq API Key — Get it here
 n8n instance (cloud or self-hosted) with a configured webhook + email workflow
 
 Installation
-bashgit clone https://github.com/yourusername/ai-document-orchestrator.git
+bashgit clone https://github.com/nikkkhhill97/ai-document-orchestrator.git
 cd ai-document-orchestrator
 pip install -r requirements.txt
 Configure Secrets
 Create .streamlit/secrets.toml:
-tomlGROQ_API_KEY = "your_groq_api_key_here"
-N8N_WEBHOOK_URL = "your_n8n_webhook_url_here"
+tomlGROQ_API_KEY = "api_key_here"
+N8N_WEBHOOK_URL = "webhook_url_here"
 Run Locally
 bashstreamlit run app.py
 
