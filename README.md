@@ -2,10 +2,10 @@
 
 [Click here to view the app] - https://ai-document-orchestrator-nikkkhhill.streamlit.app/
 
-📄##AI-Powered Document Orchestrator
+## 📄 AI-Powered Document Orchestrator
 Domain: Business Process Automation | Type: AI Application | Tools: Streamlit, Groq API (LLaMA 3.3 70B), n8n, Python
 
-#🎯 Objective
+# 🎯 Objective
 Build and deploy a fully functional AI-Powered Document Orchestrator that:
 
 Extracts structured intelligence from any uploaded document using a live LLM
